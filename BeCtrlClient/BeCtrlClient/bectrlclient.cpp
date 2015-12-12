@@ -19,7 +19,8 @@ BeCtrlClient::BeCtrlClient(QWidget *parent)
 }
 
 BeCtrlClient::~BeCtrlClient() {
-    onStop();
+    if (settings.killOnExit)
+        onStop();
     //trayIcon.hide();
 }
 
@@ -55,8 +56,7 @@ void BeCtrlClient::onStartRec() {
 }
 
 void BeCtrlClient::onStop() {
-    if (settings.killOnExit)
-        sendCmd("taskkill /F /IM BeholdTV.exe");
+    sendCmd("taskkill /F /IM BeholdTV.exe");
 }
 
 void BeCtrlClient::closeEvent(QCloseEvent *event) {
