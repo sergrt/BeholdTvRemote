@@ -1,16 +1,13 @@
+#pragma once
 #include <QString>
 #include <QSettings>
 
 class Settings {
 public:
     Settings();
-    ~Settings();
+    virtual ~Settings();
 
-    QString hostAddress;
-    unsigned short clientPort;
     unsigned short serverPort;
-    QString beholdTvPath;
-    bool killOnExit;
-private:
+protected:
     QSettings s;
 };

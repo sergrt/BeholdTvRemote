@@ -2,7 +2,11 @@
 #include <QByteArray>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <qt_windows.h>
+#include "BhMsg.h"
+#include "CustomMsg.h"
 const QString DELIMITER = "\1";
+const QString DELIMITER_PACKET = "\2";
 
 BeCtrlClient::BeCtrlClient(QWidget *parent)
     : QMainWindow(parent) {
@@ -14,6 +18,7 @@ BeCtrlClient::BeCtrlClient(QWidget *parent)
     connect(ui.channelDown, &QPushButton::clicked, this, &BeCtrlClient::onChannelDown);
     connect(ui.startRec, &QPushButton::clicked, this, &BeCtrlClient::onStartRec);
     connect(ui.stop, &QPushButton::clicked, this, &BeCtrlClient::onStop);
+    connect(ui.startApp, &QPushButton::clicked, this, &BeCtrlClient::onStartApp);
 
     //trayIcon.show();
 }
@@ -24,14 +29,22 @@ BeCtrlClient::~BeCtrlClient() {
     //trayIcon.hide();
 }
 
-void BeCtrlClient::sendCmd(const QString& cmd) {
+void BeCtrlClient::sendCmd(const QByteArray& cmd) {
     QHostAddress serverAddress;
     serverAddress.setAddress(settings.hostAddress);
-    clientSocket.writeDatagram((cmd + DELIMITER).toLocal8Bit(), serverAddress, settings.serverPort);
+    clientSocket.writeDatagram(cmd, serverAddress, settings.serverPort);
 }
 
 void BeCtrlClient::onChannelSet() {
-    sendCmd(settings.beholdTvPath + " -ch:" + ui.channelNoEdit->text());
+    QByteArray cmd;
+    cmd += QString("%1").arg(WM_BHCMD).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += QString("%1").arg(WMBH_CHNLN).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += ui.channelNoEdit->text();
+    cmd += DELIMITER_PACKET;
+    
+    sendCmd(cmd);
 }
 
 void BeCtrlClient::onChannelUp() {
@@ -52,14 +65,42 @@ void BeCtrlClient::onChannelDown() {
 }
 
 void BeCtrlClient::onStartRec() {
-    sendCmd(settings.beholdTvPath + " -r:video");
+    QByteArray cmd;
+    cmd += QString("%1").arg(WM_BHCMD).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += QString("%1").arg(WMBH_RECVSTART).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += "0";
+    cmd += DELIMITER_PACKET;
+    
+    sendCmd(cmd);
 }
 
 void BeCtrlClient::onStop() {
-    sendCmd("taskkill /F /IM BeholdTV.exe");
+    QByteArray cmd;
+    cmd += QString("%1").arg(WM_CLOSE).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += QString("%1").arg(0).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += "0";
+    cmd += DELIMITER_PACKET;
+    
+    sendCmd(cmd);
 }
 
 void BeCtrlClient::closeEvent(QCloseEvent *event) {
     //hide();
     //event->ignore();
+}
+
+void BeCtrlClient::onStartApp() {
+    QByteArray cmd;
+    cmd += QString("%1").arg(WMCM_STARTAPP).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += QString("%1").arg(0).toLocal8Bit();
+    cmd += DELIMITER;
+    cmd += "0";
+    cmd += DELIMITER_PACKET;
+    
+    sendCmd(cmd);
 }

@@ -5,7 +5,7 @@
 #include "ui_bectrlclient.h"
 #include <QUdpSocket>
 //#include <QSystemTrayIcon>
-#include "Settings.h"
+#include "SettingsClient.h"
 
 class BeCtrlClient : public QMainWindow {
     Q_OBJECT
@@ -17,18 +17,19 @@ public:
 private:
     Ui::BeCtrlClientClass ui;
     QUdpSocket clientSocket;
-    void sendCmd(const QString& cmd);
+    void sendCmd(const QByteArray& cmd);
 
     //QSystemTrayIcon trayIcon;
     void closeEvent(QCloseEvent *event);
 
-    Settings settings;
+    SettingsClient settings;
 public slots:
     void onChannelSet();
     void onChannelUp();
     void onChannelDown();
     void onStartRec();
     void onStop();
+    void onStartApp();
 };
 
 #endif // BECTRLCLIENT_H

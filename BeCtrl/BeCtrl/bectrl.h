@@ -6,19 +6,20 @@
 #include "ui_bectrl.h"
 
 class BeCtrl : public QMainWindow {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	BeCtrl(QWidget *parent = 0);
-	~BeCtrl();
+    BeCtrl(QWidget *parent = 0);
+    ~BeCtrl();
 
 private:
-	Ui::BeCtrlClass ui;
-	QUdpSocket serverSocket;
-	QByteArray pendingData;
+    Ui::BeCtrlClass ui;
+    QUdpSocket serverSocket;
+    QByteArray pendingData;
+
 public slots:
     void readPendingDatagrams();
-	void putLog(const QString& s);
+    void putLog(const QString& s);
 };
 
 #endif // BECTRL_H

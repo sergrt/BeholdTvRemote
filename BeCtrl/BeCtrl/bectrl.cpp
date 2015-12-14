@@ -1,18 +1,17 @@
 #include "bectrl.h"
 #include "Datagram.h"
 #include <QDateTime>
-const unsigned short SERVER_PORT = 12889;
+#include "SettingsServer.h"
 
 BeCtrl::BeCtrl(QWidget *parent)
     : QMainWindow(parent) {
     ui.setupUi(this);
 
-    serverSocket.bind(QHostAddress::AnyIPv4, SERVER_PORT);
+    serverSocket.bind(QHostAddress::AnyIPv4, SettingsServer().serverPort);
     connect(&serverSocket, SIGNAL(readyRead()), this, SLOT(readPendingDatagrams()));
 }
 
 BeCtrl::~BeCtrl() {
-    
 }
 
 void BeCtrl::readPendingDatagrams() {
@@ -34,4 +33,5 @@ void BeCtrl::readPendingDatagrams() {
 void BeCtrl::putLog(const QString& s) {
     const QString dateTime = QDateTime::currentDateTime().toString("yyyyMMddThhmmss");
     ui.logView->insertPlainText("[" + dateTime + "] " + s + "\n");
+    ui.logView->ensureCursorVisible();
 }

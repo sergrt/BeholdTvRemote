@@ -50,7 +50,10 @@
     <ClCompile Include="GeneratedFiles\qrc_bectrlclient.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="Settings.cpp">
+    <ClCompile Include="..\..\Common\Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -69,7 +72,16 @@
     <ClInclude Include="GeneratedFiles\ui_bectrlclient.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="Settings.h">
+    <ClInclude Include="..\..\Common\BhMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\CustomMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
